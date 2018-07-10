@@ -1,0 +1,113 @@
+{
+  "name": "@anigenero/react-apollo-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for a ReactJS project using Apollo",
+  "main": "src/index.tsx",
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
+    "apollo-link": "^1.2.2",
+    "apollo-link-context": "^1.0.8",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
+    "classnames": "^2.2.6",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "jss": "^9.8.7",
+    "jss-camel-case": "^6.1.0",
+    "jss-expand": "^5.3.0",
+    "jss-nested": "^6.0.1",
+    "log4js2": "^1.0.2",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1",
+    "react-jss": "^8.6.1",
+    "react-localize-redux": "^3.2.1",
+    "react-redux": "^5.0.7",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.2.1"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.4",
+    "@types/jest": "^23.1.5",
+    "@types/jss": "^9.5.3",
+    "@types/lodash": "^4.14.111",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^6.0.4",
+    "@types/react-router-dom": "^4.2.7",
+    "babel-loader": "^7.1.5",
+    "bitbar-webpack-progress-plugin": "^1.0.0",
+    "css-loader": "^1.0.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.4.0",
+    "jest-cli": "^23.4.0",
+    "jest-fetch-mock": "^1.6.5",
+    "jest-localstorage-mock": "^2.2.0",
+    "json-loader": "^0.5.7",
+    "mini-css-extract-plugin": "^0.4.1",
+    "react-hot-loader": "^4.3.3",
+    "style-loader": "^0.21.0",
+    "ts-jest": "^23.0.0",
+    "ts-loader": "^4.4.2",
+    "tslint": "^5.10.0",
+    "tslint-sonarts": "^1.7.0",
+    "typescript": "^2.9.2",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "scripts": {
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "test": "jest --coverage",
+    "start": "webpack-dev-server --debug --output-pathinfo --history-api-fallback --mode development --hot --inline --progress --colors --https --port 3000",
+    "build": "rm -rf ./dist && webpack --progress --colors --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anigenero/react-apollo-boilerplate.git"
+  },
+  "author": "robin.schultz@anigenero.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anigenero/react-apollo-boilerplate/issues"
+  },
+  "homepage": "https://github.com/anigenero/react-apollo-boilerplate#readme",
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/src/__mocks__/style.mock.ts",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file.mock.ts"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "setupFiles": [
+      "jest-localstorage-mock",
+      "<rootDir>/jest.setup.js",
+      "<rootDir>/src/__mocks__/requestAnimationFrame.js",
+      "<rootDir>/src/__mocks__/enzyme.setup.ts"
+    ],
+    "transform": {
+      "^.+\\.ts(x|)?$": "ts-jest",
+      "^.+\\.js(x|)?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-apollo|apollo-client))"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  }
+}

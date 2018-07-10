@@ -1,0 +1,15 @@
+{
+  "short_name": "react-apollo-boilerplate",
+  "name": "react-apollo-boilerplate",
+  "icons": [
+    {
+      "src": "fireworks-icon192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2196F3",
+  "display": "standalone"
+}
