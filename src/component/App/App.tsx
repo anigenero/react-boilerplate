@@ -1,16 +1,13 @@
 import * as React from 'react';
+import { FunctionComponent, useEffect } from 'react';
+import { LocalizeContextProps, Translate, withLocalize } from 'react-localize-redux';
+import { AppLocale } from '../../assets/locale/generated';
 
-import {LocalizeContextProps, Translate, withLocalize} from "react-localize-redux";
-import injectSheet, {WithStyles} from "react-jss";
-import {appStyles} from "./App.style";
+const englishTranslations = require('../../assets/locale/en-US.json');
 
-export class App extends React.Component<WithStyles & LocalizeContextProps> {
+export const App: FunctionComponent<LocalizeContextProps> = ({initialize, addTranslationForLanguage}) => {
 
-    constructor(props: Readonly<WithStyles & LocalizeContextProps>) {
-
-        super(props);
-
-        const {initialize, addTranslationForLanguage} = this.props;
+    useEffect(() => {
 
         initialize({
             languages: [{
@@ -24,22 +21,16 @@ export class App extends React.Component<WithStyles & LocalizeContextProps> {
             }
         });
 
-        const englishTranslations = require('../../assets/locale/en_US.json');
-
         addTranslationForLanguage(englishTranslations, 'en-US');
 
-    }
+    }, []);
 
-    public render() {
+    return (
+        <div>
+            <Translate id={AppLocale.app.longName}/>
+        </div>
+    );
 
-        return (
-            <Translate>
-                {({translate}) => (
-                    <div>{translate('app.name')}</div>
-                )}
-            </Translate>
-        );
-    }
-}
+};
 
-export default withLocalize(injectSheet(appStyles)(App));
+export default withLocalize(App);

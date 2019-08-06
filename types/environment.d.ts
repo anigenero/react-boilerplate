@@ -1,5 +1,8 @@
-declare interface IEnvironment {
+declare interface IConfiguration {
+
+    googleAnalyticsId: string;
     graphqlEndpoint: string;
+
 }
 
-declare let environment: IEnvironment;
+declare let configuration: IConfiguration;

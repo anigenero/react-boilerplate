@@ -1,92 +1,127 @@
 const webpack = require('webpack');
-const Path = require('path');
+const path = require('path');
 
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BitBarWebpackProgressPlugin = require("bitbar-webpack-progress-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const outPath = Path.resolve(__dirname, './dist');
-const sourcePath = Path.resolve(__dirname, './src');
+const outPath = path.resolve(__dirname, './dist');
+const sourcePath = path.resolve(__dirname, './src');
 
-module.exports = () => {
+const mainConfig = (env, argv) => {
+
+    const faviconDir = `assets/favicon`;
+    const config = require(`./_config/config.${argv.stage}`);
+
+    const devtool = argv.mode === 'production' ? 'none' : 'cheap-source-map';
+
     return {
-        devtool: 'source-map',
+        mode: argv.mode,
         context: sourcePath,
+        devtool,
+        devServer: {
+            historyApiFallback: true,
+            hot: false,
+            port: 3000
+        },
         entry: {
-            main: './index.tsx'
+            'main': './index.tsx',
+            'service-worker': './service-worker/worker.ts'
         },
         output: {
+            chunkFilename: '[name].[hash].bundle.js',
+            filename: (chunkData) => {
+                return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
+            },
             path: outPath,
             publicPath: '/',
-            filename: 'bundle-[name]-[hash].js'
+            pathinfo: false
         },
         target: 'web',
         resolve: {
-            extensions: ['.js', '.ts', '.tsx', 'jsx', '.css', '.png', '.jpg', '.gif']
+            extensions: ['.js', '.ts', '.tsx', 'jsx']
         },
         module: {
-            rules: [
-                {
-                    test: /\.tsx?$/,
-                    use: [{
-                        loader: 'babel-loader',
-                        options: {
-                            babelrc: true,
-                            plugins: ['react-hot-loader/babel'],
-                        },
-                    }, 'ts-loader']
-                },
-                {
-                    test: /\.(html)$/,
-                    use: {
-                        loader: 'html-loader'
-                    }
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        "css-loader"
-                    ]
-                },
-                {
-                    test: /\.(png|jp(e*)g|gif|ttf|eot|svg)$/,
-                    use: [{
-                        loader: 'url-loader',
-                        options: {
-                            limit: 1000,
-                            name: 'assets/[name]-[hash].[ext]'
-                        }
-                    }]
-                },
-                {
-                    test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                    loader: 'url-loader',
+            rules: [{
+                test: /\.ts(|x)?$/,
+                use: [{
+                    loader: 'babel-loader',
                     options: {
-                        limit: 1000,
-                        name: 'assets/[name]-[hash].[ext]',
-                        mimetype: 'application/font-woff'
+                        babelrc: false,
+                        presets: [
+                            '@babel/preset-react',
+                            ['@babel/preset-env', {
+                                corejs: '3.x',
+                                targets: {
+                                    browsers: '> 10%, not dead'
+                                },
+                                useBuiltIns: 'usage',
+                            }],
+                        ],
                     }
-                }
-            ]
+                }, 'ts-loader']
+            }, {
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                loader: 'graphql-tag/loader'
+            }, {
+                test: /\.(png|jp(e*)g|gif|ttf|eot|svg|mp3|m4r|m4a|ogg)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: './images/[hash].[ext]',
+                    }
+                }]
+            }, {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ]
+            }]
         },
         plugins: [
+            new BundleAnalyzerPlugin({
+                analyzerMode: (argv.mode !== 'production') ? 'server' : 'disabled'
+            }),
+            new CleanWebpackPlugin(),
             new webpack.DefinePlugin({
-                environment: JSON.stringify({
-                    production: false,
-                    graphqlEndpoint: 'http://localhost:4000/graph'
+                configuration: JSON.stringify({
+                    ...config
                 })
             }),
             new HtmlWebpackPlugin({
                 template: 'index.html'
             }),
             new MiniCssExtractPlugin({
-                // Options similar to the same options in webpackOptions.output
-                // both options are optional
-                filename: "[name]-[hash].css",
-                chunkFilename: "[id]-[hash].css"
+                filename: '[name]-[hash].css',
+                chunkFilename: '[id]-[hash].css'
             }),
-            new BitBarWebpackProgressPlugin()
+            new CopyWebpackPlugin([
+                faviconDir,
+                'manifest.json',
+                'robots.txt',
+                'sitemap.xml'
+            ]),
+            new WebpackAssetsManifest({
+                output: 'cache.json',
+                customize(entry) {
+
+                    // prevent service worker from being added to the manifest
+                    if (entry.key.toLowerCase().startsWith('service-worker')) {
+                        return false;
+                    }
+
+                    return entry;
+
+                }
+            })
         ]
-    }
+    };
+
 };
+
+module.exports = mainConfig;

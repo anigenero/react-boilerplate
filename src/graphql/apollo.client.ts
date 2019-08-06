@@ -4,9 +4,10 @@ import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 import { createHttpLink } from 'apollo-link-http';
-import { getGraphQLEndpoint } from '../util/env.util';
+import { getGraphQLEndpoint } from '../util/config.util';
+import { getLogger } from '../util/log.util';
 
-const log = require('log4js2').getLogger('apollo');
+const _log = getLogger('apollo');
 
 /**
  * Creates the request link that points to the GraphQL endpoint
@@ -39,7 +40,11 @@ const errorLink = onError(({operation, response, graphQLErrors, networkError}) =
     if (graphQLErrors || networkError) {
 
         graphQLErrors.forEach(({message, locations, path}) => {
-            log.error(message);
+
+            _log.error(message);
+
+            // TODO: do something with the errors
+
         });
 
     }
@@ -47,10 +52,11 @@ const errorLink = onError(({operation, response, graphQLErrors, networkError}) =
 
 // assemble and export the client
 export const apolloClient: ApolloClient<any> = new ApolloClient({
+    cache: new InMemoryCache(),
     link: ApolloLink.from([
         errorLink,
         httpLink,
         requestLink
     ]),
-    cache: new InMemoryCache()
+    defaultOptions: {}
 });

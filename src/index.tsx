@@ -1,19 +1,24 @@
+import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
+import { ApolloProvider } from 'react-apollo';
+import { render } from 'react-dom';
+import { LocalizeProvider } from 'react-localize-redux';
+import { Provider } from 'react-redux';
+import App from './component/App/App';
+import { apolloClient } from './graphql/apollo.client';
+import { browserHistory, reduxStore } from './redux/redux.store';
+import { register } from './registerServiceWorker';
 
-import {render} from "react-dom";
-import {ApolloProvider} from "react-apollo";
-import {apolloClient} from "./graphql/apollo.client";
-import {Provider} from "react-redux";
-import reduxStore from "./redux/redux.store";
-import App from "./component/App/App";
-import {LocalizeProvider} from "react-localize-redux";
+register();
 
 render((
-    <ApolloProvider client={apolloClient}>
-        <Provider store={reduxStore}>
-            <LocalizeProvider>
-                <App/>
-            </LocalizeProvider>
-        </Provider>
-    </ApolloProvider>
+    <Provider store={reduxStore}>
+        <ConnectedRouter history={browserHistory}>
+            <ApolloProvider client={apolloClient}>
+                <LocalizeProvider store={reduxStore}>
+                    <App/>
+                </LocalizeProvider>
+            </ApolloProvider>
+        </ConnectedRouter>
+    </Provider>
 ), document.getElementById('root'));
