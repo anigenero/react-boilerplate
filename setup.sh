@@ -27,3 +27,7 @@ openssl x509 -in private.crt -out private.pem -outform PEM
 
 cd ../
 
+# install dependencies
+
+npm i
+npm run generate:locale

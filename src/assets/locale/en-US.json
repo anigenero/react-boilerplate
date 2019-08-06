@@ -1,5 +1,9 @@
 {
   "app": {
     "longName": "React Apollo Boilerplate"
+  },
+  "task": {
+    "placeholder": "New Task",
+    "submit": "Submit"
   }
 }

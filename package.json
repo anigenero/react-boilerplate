@@ -5,6 +5,9 @@
   "main": "src/index.tsx",
   "dependencies": {
     "@log4js2/core": "^2.0.9",
+    "@material-ui/core": "^4.3.1",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/styles": "^4.3.0",
     "apollo-boost": "^0.4.3",
     "apollo-link-context": "^1.0.18",
     "classnames": "^2.2.6",
