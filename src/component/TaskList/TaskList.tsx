@@ -16,9 +16,9 @@ import { FunctionComponent, useState } from 'react';
 import { Translate } from 'react-localize-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppLocale } from '../../assets/locale/generated';
-import { IAppState } from '../../redux/app.state';
+import { AppState } from '../../redux/app.state';
 import { TaskDispatchActions } from '../../redux/task/task.action';
-import { ITask } from '../../redux/task/task.def';
+import { Task } from '../../redux/task/task.def';
 import { taskListStyles } from './TaskList.style';
 
 const useStyles = makeStyles(taskListStyles);
@@ -30,7 +30,7 @@ export const TaskList: FunctionComponent<{ edit: boolean }> = ({edit}) => {
     const [text, setText] = useState('');
 
     const dispatch = useDispatch();
-    const props = useSelector<IAppState, { tasks: ITask[] }>(({task: {tasks = []}}) => ({
+    const props = useSelector<AppState, { tasks: Task[] }>(({task: {tasks = []}}) => ({
         tasks
     }));
 

@@ -1,13 +1,13 @@
-import { ITask, TaskActions, TaskActionTypes } from './task.def';
+import { Task, TaskActions, TaskActionTypes } from './task.def';
 
 export namespace TaskDispatchActions {
 
     /**
      * Adds a task
      *
-     * @param {ITask} task
+     * @param {Task} task
      */
-    export const addTask = (task: ITask): TaskActions[typeof TaskActionTypes.ADD] => ({
+    export const addTask = (task: Task): TaskActions[typeof TaskActionTypes.ADD] => ({
         type: TaskActionTypes.ADD,
         task
     });
@@ -15,7 +15,7 @@ export namespace TaskDispatchActions {
     /**
      * Sets the task as complete
      *
-     * @param {ITask} id
+     * @param {Task} id
      */
     export const setTaskComplete = (id: number): TaskActions[typeof TaskActionTypes.SET_TASK_COMPLETE] => ({
         type: TaskActionTypes.SET_TASK_COMPLETE,

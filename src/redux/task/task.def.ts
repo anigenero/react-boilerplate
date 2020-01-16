@@ -13,7 +13,7 @@ export type TaskActions = {
 
     [TaskActionTypes.ADD]: {
         type: typeof TaskActionTypes.ADD;
-        task: ITask;
+        task: Task;
     };
 
     [TaskActionTypes.SET_TASK_COMPLETE]: {
@@ -28,25 +28,23 @@ export type TaskActions = {
 
 };
 
-export interface ITask {
+export type Task = {
 
     complete: boolean;
     text: string;
 
-}
+};
 
-export interface ITaskState {
-
-    tasks: ITask[];
-
-}
+export type TaskState = {
+    tasks: Task[];
+};
 
 export type TaskAction = TaskActions[typeof TaskActionTypes.ADD] |
     TaskActions[typeof TaskActionTypes.REMOVE] |
     TaskActions[typeof TaskActionTypes.SET_TASK_COMPLETE];
 
 export const taskStateTransform = createTransform(
-    (inboundState: ITaskState, key) => {
+    (inboundState: TaskState, key) => {
         if (key !== 'task') {
             return inboundState;
         } else {

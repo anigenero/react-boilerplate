@@ -1,14 +1,14 @@
 import { Reducer } from 'react';
-import { ITaskState, TaskAction, TaskActionTypes } from './task.def';
+import { TaskState, TaskAction, TaskActionTypes } from './task.def';
 
-const _defaultState: ITaskState = {
+const _defaultState: TaskState = {
     tasks: [{
         text: 'Add a task or mark me as complete',
         complete: false
     }]
 };
 
-export const taskReducer: Reducer<ITaskState, TaskAction> = (state, action) => {
+export const taskReducer: Reducer<TaskState, TaskAction> = (state, action) => {
 
     switch (action.type) {
 
