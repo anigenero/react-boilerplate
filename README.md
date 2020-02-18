@@ -1,5 +1,5 @@
 # react-apollo-boilerplate
-A ReactJS web application that has a simple to-do list to demonstrate the "stack".
+Provides a modern web application skeleton written in Typescript
 
 ## Installation
 

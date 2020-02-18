@@ -36,10 +36,10 @@ const httpLink: ApolloLink = setContext((_, {headers}) => ({
  *
  * @type {ApolloLink}
  */
-const errorLink = onError(({operation, response, graphQLErrors, networkError}) => {
+const errorLink = onError(({graphQLErrors, networkError}) => {
     if (graphQLErrors || networkError) {
 
-        graphQLErrors.forEach(({message, locations, path}) => {
+        graphQLErrors.forEach(({message}) => {
 
             _log.error(message);
 

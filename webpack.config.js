@@ -14,14 +14,24 @@ const sourcePath = path.resolve(__dirname, './src');
 const mainConfig = (env, argv) => {
 
     const faviconDir = `assets/favicon`;
-    const config = require(`./_config/config.${argv.stage}`);
+    const {
+        analyzer,
+        googleAnalyticsId,
+        graphqlEndpoint
+    } = argv;
 
-    const devtool = argv.mode === 'production' ? 'none' : 'cheap-source-map';
+    const optionalPlugins = [];
+    if (analyzer) {
+        optionalPlugins.push(
+            new BundleAnalyzerPlugin({
+                analyzerMode: (argv.mode !== 'production') ? 'server' : 'disabled'
+            })
+        );
+    }
 
     return {
-        mode: argv.mode,
         context: sourcePath,
-        devtool,
+        devtool: (argv.mode === 'production' ? 'none' : 'source-map'),
         devServer: {
             historyApiFallback: true,
             hot: false,
@@ -31,19 +41,7 @@ const mainConfig = (env, argv) => {
             'main': './index.tsx',
             'service-worker': './service-worker/worker.ts'
         },
-        output: {
-            chunkFilename: '[name].[hash].bundle.js',
-            filename: (chunkData) => {
-                return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
-            },
-            path: outPath,
-            publicPath: '/',
-            pathinfo: false
-        },
-        target: 'web',
-        resolve: {
-            extensions: ['.js', '.ts', '.tsx', 'jsx']
-        },
+        mode: argv.mode,
         module: {
             rules: [{
                 test: /\.ts(|x)?$/,
@@ -68,7 +66,7 @@ const mainConfig = (env, argv) => {
                 exclude: /node_modules/,
                 loader: 'graphql-tag/loader'
             }, {
-                test: /\.(png|jp(e*)g|gif|ttf|eot|svg|mp3|m4r|m4a|ogg)$/,
+                test: /\.(png|jp(e*)g|gif|ttf|eot|svg|mp3|m4r|m4a|ogg|mp4|webm)$/,
                 use: [{
                     loader: 'file-loader',
                     options: {
@@ -83,14 +81,22 @@ const mainConfig = (env, argv) => {
                 ]
             }]
         },
+        output: {
+            chunkFilename: '[name].[hash].bundle.js',
+            filename(chunkData) {
+                return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
+            },
+            path: outPath,
+            pathinfo: false,
+            publicPath: '/'
+        },
         plugins: [
-            new BundleAnalyzerPlugin({
-                analyzerMode: (argv.mode !== 'production') ? 'server' : 'disabled'
-            }),
+            ...optionalPlugins,
             new CleanWebpackPlugin(),
             new webpack.DefinePlugin({
                 configuration: JSON.stringify({
-                    ...config
+                    googleAnalyticsId,
+                    graphqlEndpoint
                 })
             }),
             new HtmlWebpackPlugin({
@@ -119,7 +125,11 @@ const mainConfig = (env, argv) => {
 
                 }
             })
-        ]
+        ],
+        resolve: {
+            extensions: ['.js', '.ts', '.tsx', 'jsx']
+        },
+        target: 'web',
     };
 
 };

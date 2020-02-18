@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
@@ -19,7 +20,7 @@
     "node_modules",
     "/**/*.spec.ts",
     "/**/*.spec.tsx",
-    "./src/__mocks__/*.ts"
+    "./src/__testutils__/*.ts"
   ],
   "include": [
     "./types/**/*",

@@ -32,9 +32,14 @@ const persistConfig: PersistConfig<AppState> = {
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
+let reducerCompose = compose;
+if (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    reducerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+}
+
 export const reduxStore = createStore(
     persistedReducer,
-    compose(
+    reducerCompose(
         applyMiddleware(
             epicMiddleware,
             routerMiddleware(browserHistory)

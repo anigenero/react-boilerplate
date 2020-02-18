@@ -9,8 +9,7 @@ fs.readFile('./src/assets/locale/en-US.json', (err: Error, data: any) => {
     }
 
     const obj = JSON.parse(data.toString());
-    const output = `// tslint:disable:max-classes-per-file variable-name
-    export class AppLocale {
+    const output = `export namespace AppLocale {
         ${_handleTree(obj)}
     }`;
 
@@ -33,9 +32,9 @@ function _handleTree(obj: any, longKey?: string) {
 
         let result = groups;
         if (isObjectLike(obj[value])) {
-            result += `public static readonly ${value} = class { ${_handleTree(obj[value], treeKey)} };`;
+            result += `export namespace ${value} { ${_handleTree(obj[value], treeKey)} };`;
         } else {
-            result += `public static readonly ${value}: string = '${treeKey}';`;
+            result += `export const ${value} = '${treeKey}';`;
         }
 
         return result;
