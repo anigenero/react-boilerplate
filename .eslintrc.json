@@ -3,14 +3,17 @@
     "browser": true
   },
   "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "tsconfig.json",
     "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "ignorePatterns": [
     "src/graphql/generated.ts",
@@ -20,7 +23,6 @@
   ],
   "plugins": [
     "@typescript-eslint",
-    "@typescript-eslint/tslint",
     "import",
     "prefer-arrow",
     "react"

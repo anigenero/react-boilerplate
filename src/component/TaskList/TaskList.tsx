@@ -24,7 +24,7 @@ type TaskListComponentProps =
     StandardProps<HTMLAttributes<HTMLDivElement>, TaskListCssKey> &
     {
         edit: boolean;
-    }
+    };
 
 const useStyles = makeStyles(taskListStyles);
 
