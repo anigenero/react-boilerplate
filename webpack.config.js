@@ -109,7 +109,7 @@ const mainConfig = (env, argv) => {
             publicPath: '/'
         },
         plugins: [
-            // new CleanWebpackPlugin(),
+            new CleanWebpackPlugin(),
             new Dotenv(),
             new HtmlWebpackPlugin({
                 template: 'index.html'
