@@ -10,7 +10,6 @@ export namespace TaskActionTypes {
 
 }
 
-// tslint:disable-next-line:interface-over-type-literal
 export type TaskActions = {
 
     [TaskActionTypes.ADD]: {
@@ -21,7 +20,7 @@ export type TaskActions = {
     [TaskActionTypes.COMPLETE_TASK]: {
         type: typeof TaskActionTypes.COMPLETE_TASK;
         id: string;
-    }
+    };
 
     [TaskActionTypes.CREATE_TASK]: {
         type: typeof TaskActionTypes.CREATE_TASK;

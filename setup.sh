@@ -34,7 +34,13 @@ if [[ ! -d '.cert' ]]; then
     -extfile ssl.conf
 
   if [ -x "$(command -v security)" ]; then
-    sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+
+    read -r -p "Trust the generated certificate for local development? (y/n) " trust
+    if [[ "Y" == "${trust}" || "y" == "${trust}" ]]; then
+      echo "You might be prompted for your user password"
+      sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+    fi
+
   fi
 
   openssl x509 -in private.crt -out private.pem -outform PEM

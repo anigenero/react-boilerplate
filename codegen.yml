@@ -1,7 +1,7 @@
 overwrite: true
 schema:
   # list your schema endpoints here
-  - "https://localhost:4000/graphql"
+  - {GRAPHQL_ENDPOINT}
 documents: "**/*.graphql"
 generates:
   src/graphql/generated.ts:

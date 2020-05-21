@@ -9,7 +9,6 @@ const _LOCALES: { [key: string]: any } = {};
 (() => {
 
     const files: string[] = fs.readdirSync(_LOCALE_DIR);
-    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < files.length; i++) {
         if (files[i].endsWith('.json')) {
             handleLocale(files[i]);
@@ -40,7 +39,6 @@ function _verifyLocaleValueExists(values: string[]) {
 
     const count = values.length;
     for (let i = 0; i < count; i++) {
-        // tslint:disable-next-line:forin
         for (const key in _LOCALES) {
             try {
                 expect(_LOCALES[key]).toHaveProperty(values[i]);

@@ -6,12 +6,12 @@ import {combineEpics, createEpicMiddleware} from 'redux-observable';
 import {PersistConfig, persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
+import {asyncScheduler} from 'rxjs';
 import {AppState} from './app.state';
+import {EpicDependencies} from './epic.def';
 import {taskStateTransform} from './task/task.def';
+import {TaskEpics} from './task/task.epic';
 import {taskReducer} from './task/task.reducer';
-import {asyncScheduler} from "rxjs";
-import {TaskEpics} from "./task/task.epic";
-import {EpicDependencies} from "./epic.def";
 
 export const browserHistory = createBrowserHistory();
 

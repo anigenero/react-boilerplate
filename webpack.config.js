@@ -14,8 +14,6 @@ const sourcePath = path.resolve(__dirname, './src');
 
 const mainConfig = (env, argv) => {
 
-    console.dir(argv.mode);
-
     const isDevelopment = argv.mode === 'development';
 
     const faviconDir = `assets/favicon`;

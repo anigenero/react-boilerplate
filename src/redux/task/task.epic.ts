@@ -1,10 +1,10 @@
-import {Epic, ofType} from "redux-observable";
-import {TaskAction, TaskActions, TaskActionTypes} from "./task.def";
-import {AppState} from "../app.state";
-import {delay, mergeMap, switchMap} from "rxjs/operators";
-import {EpicDependencies} from "../epic.def";
-import {TaskDispatchActions} from "./task.action";
-import {of, merge} from "rxjs";
+import {Epic, ofType} from 'redux-observable';
+import {of, merge} from 'rxjs';
+import {delay, mergeMap, switchMap} from 'rxjs/operators';
+import {AppState} from '../app.state';
+import {EpicDependencies} from '../epic.def';
+import {TaskDispatchActions} from './task.action';
+import {TaskAction, TaskActions, TaskActionTypes} from './task.def';
 
 export namespace TaskEpics {
 

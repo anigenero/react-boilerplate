@@ -1,7 +1,5 @@
 import { compose } from 'redux';
 
-// tslint:disable:interface-name
-
 declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION__: any;

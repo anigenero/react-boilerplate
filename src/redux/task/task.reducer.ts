@@ -20,7 +20,7 @@ const _getTaskIndex = (id: string, stack: Task[]) => {
 
     return -1;
 
-}
+};
 
 export const taskReducer: Reducer<TaskState, TaskReducerAction> = (state, action) => {
 

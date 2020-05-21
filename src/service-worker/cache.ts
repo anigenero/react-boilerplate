@@ -102,7 +102,6 @@ self.addEventListener('fetch', (event: FetchEvent) => {
         return;
     }
 
-    // tslint:disable-next-line:only-arrow-functions space-before-function-paren
     event.respondWith(_getFromCache(event.request).then((content) => {
         if (content) {
             return _update(event.request).then((response) => _refresh(response));
