@@ -1,20 +1,31 @@
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
-import { localizeReducer } from 'react-localize-redux';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import { combineEpics, createEpicMiddleware } from 'redux-observable';
-import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
+import {connectRouter, routerMiddleware} from 'connected-react-router';
+import {createBrowserHistory} from 'history';
+import {localizeReducer} from 'react-localize-redux';
+import {Action, applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import {combineEpics, createEpicMiddleware} from 'redux-observable';
+import {PersistConfig, persistReducer, persistStore} from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
-import { AppState } from './app.state';
-import { taskStateTransform } from './task/task.def';
-import { taskReducer } from './task/task.reducer';
+import {AppState} from './app.state';
+import {taskStateTransform} from './task/task.def';
+import {taskReducer} from './task/task.reducer';
+import {asyncScheduler} from "rxjs";
+import {TaskEpics} from "./task/task.epic";
+import {EpicDependencies} from "./epic.def";
 
 export const browserHistory = createBrowserHistory();
 
-export const rootEpic = combineEpics();
+export const rootEpic = combineEpics(
+    TaskEpics.createTask,
+    TaskEpics.markTaskComplete
+);
 
-const epicMiddleware = createEpicMiddleware();
+const epicMiddleware =
+    createEpicMiddleware<Action, Action, AppState, EpicDependencies>({
+        dependencies: {
+            scheduler: asyncScheduler
+        }
+    });
 
 export const reducer = combineReducers<AppState>({
     localize: localizeReducer,

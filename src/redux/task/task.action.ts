@@ -1,4 +1,4 @@
-import { Task, TaskActions, TaskActionTypes } from './task.def';
+import {Task, TaskActions, TaskActionTypes} from './task.def';
 
 export namespace TaskDispatchActions {
 
@@ -13,11 +13,26 @@ export namespace TaskDispatchActions {
     });
 
     /**
+     * Complete task
+     *
+     * @param {string} id
+     */
+    export const completeTask = (id: string): TaskActions[typeof TaskActionTypes.COMPLETE_TASK] => ({
+        type: TaskActionTypes.COMPLETE_TASK,
+        id
+    });
+
+    export const createTask = (task: string): TaskActions[typeof TaskActionTypes.CREATE_TASK] => ({
+        type: TaskActionTypes.CREATE_TASK,
+        task
+    });
+
+    /**
      * Sets the task as complete
      *
      * @param {Task} id
      */
-    export const setTaskComplete = (id: number): TaskActions[typeof TaskActionTypes.SET_TASK_COMPLETE] => ({
+    export const setTaskComplete = (id: string): TaskActions[typeof TaskActionTypes.SET_TASK_COMPLETE] => ({
         type: TaskActionTypes.SET_TASK_COMPLETE,
         id
     });
@@ -27,7 +42,7 @@ export namespace TaskDispatchActions {
      *
      * @param {number} id
      */
-    export const removeTask = (id: number): TaskActions[typeof TaskActionTypes.REMOVE] => ({
+    export const removeTask = (id: string): TaskActions[typeof TaskActionTypes.REMOVE] => ({
         type: TaskActionTypes.REMOVE,
         id
     });

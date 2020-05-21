@@ -1,14 +1,28 @@
-import { Reducer } from 'react';
-import { TaskState, TaskAction, TaskActionTypes } from './task.def';
+import {Reducer} from 'react';
+import {TaskState, TaskReducerAction, TaskActionTypes, Task} from './task.def';
 
 const _defaultState: TaskState = {
     tasks: [{
+        id: `${new Date().getTime()}`,
         text: 'Add a task or mark me as complete',
         complete: false
     }]
 };
 
-export const taskReducer: Reducer<TaskState, TaskAction> = (state, action) => {
+const _getTaskIndex = (id: string, stack: Task[]) => {
+
+    const count = stack.length;
+    for (let i = 0; i < count; i++) {
+        if (stack[i].id === id) {
+            return i;
+        }
+    }
+
+    return -1;
+
+}
+
+export const taskReducer: Reducer<TaskState, TaskReducerAction> = (state, action) => {
 
     switch (action.type) {
 
@@ -22,22 +36,32 @@ export const taskReducer: Reducer<TaskState, TaskAction> = (state, action) => {
         }
 
         case TaskActionTypes.REMOVE: {
+
+            const index = _getTaskIndex(action.id, state.tasks);
+
             return {
                 tasks: [
-                    ...state.tasks.slice(0, action.id),
-                    ...state.tasks.slice(action.id + 1)
+                    ...state.tasks.slice(0, index),
+                    ...state.tasks.slice(index + 1)
                 ]
             };
         }
 
         case TaskActionTypes.SET_TASK_COMPLETE: {
+
+            const index = _getTaskIndex(action.id, state.tasks);
+
             return {
                 tasks: [
-                    ...state.tasks.slice(0, action.id),
-                    {...state.tasks[action.id], complete: true},
-                    ...state.tasks.slice(action.id + 1)
+                    ...state.tasks.slice(0, index),
+                    {
+                        ...state.tasks[index],
+                        complete: true
+                    },
+                    ...state.tasks.slice(index + 1)
                 ]
             };
+
         }
 
         default: {

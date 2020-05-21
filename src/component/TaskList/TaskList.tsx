@@ -1,4 +1,4 @@
-import { StandardProps } from '@material-ui/core';
+import {StandardProps} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -10,15 +10,15 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import { isEmpty } from 'lodash';
-import React, { FunctionComponent, HTMLAttributes, useState } from 'react';
-import { Translate } from 'react-localize-redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppLocale } from '../../assets/locale/generated';
-import { AppState } from '../../redux/app.state';
-import { TaskDispatchActions } from '../../redux/task/task.action';
-import { Task } from '../../redux/task/task.def';
-import { TaskListCssKey, taskListStyles } from './TaskList.style';
+import {isEmpty} from 'lodash';
+import React, {FunctionComponent, HTMLAttributes, useState} from 'react';
+import {Translate} from 'react-localize-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppLocale} from '../../assets/locale/generated';
+import {AppState} from '../../redux/app.state';
+import {TaskDispatchActions} from '../../redux/task/task.action';
+import {Task} from '../../redux/task/task.def';
+import {TaskListCssKey, taskListStyles} from './TaskList.style';
 
 type TaskListComponentProps =
     StandardProps<HTMLAttributes<HTMLDivElement>, TaskListCssKey> &
@@ -50,8 +50,9 @@ export const TaskList: FunctionComponent<TaskListComponentProps> =
 
                             {!edit && (
                                 <ListItemIcon>
-                                    <IconButton size="small" color={!task.complete ? 'default' : 'primary'} className={classes.fab}
-                                                onClick={() => dispatch(TaskDispatchActions.setTaskComplete(index))}>
+                                    <IconButton size="small" color={!task.complete ? 'default' : 'primary'}
+                                                className={classes.fab}
+                                                onClick={() => dispatch(TaskDispatchActions.completeTask(task.id))}>
                                         <CheckIcon/>
                                     </IconButton>
                                 </ListItemIcon>
@@ -60,7 +61,7 @@ export const TaskList: FunctionComponent<TaskListComponentProps> =
                             {edit && (
                                 <ListItemIcon>
                                     <IconButton size="small" className={classes.fab}
-                                                onClick={() => dispatch(TaskDispatchActions.removeTask(index))}>
+                                                onClick={() => dispatch(TaskDispatchActions.removeTask(task.id))}>
                                         <CloseIcon/>
                                     </IconButton>
                                 </ListItemIcon>
@@ -76,7 +77,7 @@ export const TaskList: FunctionComponent<TaskListComponentProps> =
 
                         evt.preventDefault();
 
-                        dispatch(TaskDispatchActions.addTask({text, complete: false}));
+                        dispatch(TaskDispatchActions.createTask(text));
                         setText('');
 
                     }} style={{display: 'flex', flex: 1}}>
