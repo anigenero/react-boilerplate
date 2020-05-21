@@ -11,8 +11,8 @@ import App from './component/App/App';
 import './google.analytics';
 import { apolloClient } from './graphql/apollo.client';
 import { browserHistory, persistor, reduxStore } from './redux/redux.store';
-import { register } from './registerServiceWorker';
-import { theme } from './theme';
+import { register } from './register.sw';
+import { theme } from './theme/theme';
 
 register();
 

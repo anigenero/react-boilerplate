@@ -43,7 +43,6 @@ Provides a modern web application skeleton written in Typescript
 #### Build Tools
 - [webpack](https://webpack.js.org/)
 - [graphql-tag](https://github.com/apollographql/graphql-tag)
-- [ts-loader](https://github.com/TypeStrong/ts-loader)
 - [babel](https://babeljs.io/)
 
 #### Other

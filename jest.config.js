@@ -20,7 +20,7 @@ module.exports = {
     preset: 'ts-jest',
     setupFiles: [
         '<rootDir>/jest.setup.ts',
-        '<rootDir>/test/requestAnimationFrame.js'
+        '<rootDir>/src/__testutils__/requestAnimationFrame.js'
     ],
     transform: {
         '\\.(gql|graphql)$': '<rootDir>/jest.graphql.js'

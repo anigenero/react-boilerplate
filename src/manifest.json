@@ -1,9 +1,9 @@
 {
-  "short_name": "react-boilerplate",
-  "name": "react-boilerplate",
+  "short_name": "React Boilerplate",
+  "name": "React Boilerplate",
   "icons": [
     {
-      "src": "fireworks-icon192x192.png",
+      "src": "icon192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }
