@@ -1,4 +1,4 @@
-# react-apollo-boilerplate
+# react-boilerplate
 
 This boilerplate is a simple to-do task application that provides a modern React web application skeleton written in Typescript.
 
