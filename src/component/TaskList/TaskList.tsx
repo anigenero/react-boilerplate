@@ -48,7 +48,7 @@ export const TaskList: FunctionComponent<TaskListComponentProps> =
 
                             <ListItemText primary={task.text}/>
 
-                            {!edit && (
+                            {edit && (
                                 <ListItemIcon>
                                     <IconButton size="small" color={!task.complete ? 'default' : 'primary'} className={classes.fab}
                                                 onClick={() => dispatch(TaskDispatchActions.setTaskComplete(index))}>

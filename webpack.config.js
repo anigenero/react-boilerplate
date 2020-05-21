@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
@@ -7,18 +6,20 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const outPath = path.resolve(__dirname, './dist');
 const sourcePath = path.resolve(__dirname, './src');
 
 const mainConfig = (env, argv) => {
 
+    console.dir(argv.mode);
+
+    const isDevelopment = argv.mode === 'development';
+
     const faviconDir = `assets/favicon`;
-    const {
-        analyzer,
-        googleAnalyticsId,
-        graphqlEndpoint
-    } = argv;
+    const {analyzer} = argv;
 
     const optionalPlugins = [];
     if (analyzer) {
@@ -29,12 +30,19 @@ const mainConfig = (env, argv) => {
         );
     }
 
+    if (isDevelopment) {
+        optionalPlugins.push(new ReactRefreshWebpackPlugin());
+    }
+
     return {
         context: sourcePath,
-        devtool: (argv.mode === 'production' ? 'none' : 'source-map'),
+        devtool: (!isDevelopment ? 'none' : 'source-map'),
         devServer: {
             historyApiFallback: true,
-            hot: false,
+            hot: true,
+            hotOnly: true,
+            inline: true,
+            liveReload: false,
             port: 3000
         },
         entry: {
@@ -58,9 +66,15 @@ const mainConfig = (env, argv) => {
                                 },
                                 useBuiltIns: 'usage',
                             }],
+                            ['@babel/preset-typescript', {
+                                allowNamespaces: true
+                            }]
                         ],
+                        plugins: [
+                            isDevelopment && 'react-refresh/babel'
+                        ].filter(Boolean)
                     }
-                }, 'ts-loader']
+                }]
             }, {
                 test: /\.(graphql|gql)$/,
                 exclude: /node_modules/,
@@ -82,23 +96,21 @@ const mainConfig = (env, argv) => {
             }]
         },
         output: {
-            chunkFilename: '[name].[hash].bundle.js',
+            chunkFilename: isDevelopment ? '[name].js' : '[name].[hash].bundle.js',
             filename(chunkData) {
-                return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
+                if (!isDevelopment) {
+                    return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
+                } else {
+                    return '[name].js';
+                }
             },
             path: outPath,
             pathinfo: false,
             publicPath: '/'
         },
         plugins: [
-            ...optionalPlugins,
-            new CleanWebpackPlugin(),
-            new webpack.DefinePlugin({
-                configuration: JSON.stringify({
-                    googleAnalyticsId,
-                    graphqlEndpoint
-                })
-            }),
+            // new CleanWebpackPlugin(),
+            new Dotenv(),
             new HtmlWebpackPlugin({
                 template: 'index.html'
             }),
@@ -106,12 +118,14 @@ const mainConfig = (env, argv) => {
                 filename: '[name]-[hash].css',
                 chunkFilename: '[id]-[hash].css'
             }),
-            new CopyWebpackPlugin([
-                faviconDir,
-                'manifest.json',
-                'robots.txt',
-                'sitemap.xml'
-            ]),
+            new CopyWebpackPlugin({
+                patterns: [
+                    faviconDir,
+                    'manifest.json',
+                    'robots.txt',
+                    'sitemap.xml'
+                ]
+            }),
             new WebpackAssetsManifest({
                 output: 'cache.json',
                 customize(entry) {
@@ -124,8 +138,9 @@ const mainConfig = (env, argv) => {
                     return entry;
 
                 }
-            })
-        ],
+            }),
+            ...optionalPlugins
+        ].filter(Boolean),
         resolve: {
             extensions: ['.js', '.ts', '.tsx', 'jsx']
         },

@@ -1,19 +1,10 @@
 /**
- * Gets the environment. We use this as a function because webpack will superimpose
- * the JSON object over every "environment" instance in the code
- *
- * @returns {Configuration}
- * @private
- */
-const _getEnvironment = (): Configuration => (configuration);
-
-/**
  * Gets the Google Analytics ID
  */
-export const getGoogleAnalyticsId = (): string => _getEnvironment().googleAnalyticsId;
+export const getGoogleAnalyticsId = (): string => process.env.GOOGLE_ANALYTICS_ID;
 
 /**
  * Returns the GraphQL endpoint
  * @returns {string}
  */
-export const getGraphQLEndpoint = (): string => _getEnvironment().graphqlEndpoint;
+export const getGraphQLEndpoint = (): string => process.env.GRAPHQL_ENDPOINT;
