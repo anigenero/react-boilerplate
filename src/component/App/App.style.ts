@@ -7,7 +7,7 @@ export type AppCssKey =
     'title';
 
 export const appStyles =
-    (theme: Theme): StyleRules<{}, AppCssKey> =>
+    (theme: Theme): StyleRules<EmptyRecord, AppCssKey> =>
         createStyles({
             grow: {
                 flex: 1

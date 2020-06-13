@@ -6,7 +6,7 @@ export type TaskListCssKey =
     'fab';
 
 export const taskListStyles =
-    (theme: Theme): StyleRules<{}, TaskListCssKey> =>
+    (theme: Theme): StyleRules<EmptyRecord, TaskListCssKey> =>
         createStyles({
             control: {
                 width: '100%',
