@@ -5,3 +5,10 @@ node_modules/
 .cert/
 
 .env
+
+src/assets/locale/generated.ts
+
+src/graphql/generated.ts
+src/graphql/introspection.ts
+
+types/graphql.d.ts

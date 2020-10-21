@@ -4,7 +4,20 @@ schema:
   - {GRAPHQL_ENDPOINT}
 documents: "**/*.graphql"
 generates:
+  # creates typescript definitions
   src/graphql/generated.ts:
     plugins:
       - typescript
       - typescript-operations
+  # creates introspection for the fragment matcher
+  src/graphql/introspection.ts:
+    documents: "**/*.graphql"
+    plugins:
+      - fragment-matcher
+    config:
+      apolloClientVersion: 3
+  # allows typescript importing
+  types/graphql.d.ts:
+    documents: '**/*.graphql'
+    plugins:
+      - typescript-graphql-files-modules

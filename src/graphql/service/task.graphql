@@ -1,0 +1,21 @@
+query getTasks {
+    id
+    complete
+    text
+}
+
+mutation completeTask($id: String!) {
+    completeTask(id: $id)
+}
+
+mutation createTask($task: TaskInput!) {
+    createTask(task: $task) {
+        id
+        complete
+        text
+    }
+}
+
+mutation deleteTask($id: String!) {
+    deleteTask(id: $id)
+}

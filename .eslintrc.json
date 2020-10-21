@@ -3,7 +3,9 @@
     "browser": true
   },
   "extends": [
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,20 +19,21 @@
   },
   "ignorePatterns": [
     "src/graphql/generated.ts",
+    "src/graphql/introspection.ts",
     "src/assets/locale/generated.ts",
     "src/__testutils__/*.ts",
-    "src/**/__tests__/*"
+    "src/**/__tests__/*.ts"
   ],
   "plugins": [
     "@typescript-eslint",
     "import",
-    "prefer-arrow",
-    "react"
+    "prefer-arrow"
   ],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-definitions": "off",
@@ -73,6 +76,7 @@
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/no-shadow": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/prefer-for-of": "error",
@@ -176,12 +180,6 @@
     "no-multiple-empty-lines": "error",
     "no-new-wrappers": "error",
     "no-redeclare": "error",
-    "no-shadow": [
-      "error",
-      {
-        "hoist": "all"
-      }
-    ],
     "no-throw-literal": "error",
     "no-trailing-spaces": "off",
     "no-undef-init": "error",

@@ -1,80 +1,95 @@
-const isLocalhost = Boolean(
+const _SW_URL = '/service-worker.js';
+const _IS_LOCALHOST = Boolean(
     window.location.hostname === 'localhost' ||
-    // [::1] is the IPv6 localhost address.ts.
     window.location.hostname === '[::1]' ||
-    // 127.0.0.1/8 is considered localhost for IPv4.
     window.location.hostname.match(
         /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
 );
 
-const _registerValidSW = (swUrl: string) =>
-    navigator.serviceWorker
-        .register(swUrl)
-        .then((registration) => {
-            registration.onupdatefound = () => {
-                const installingWorker = registration.installing;
-                installingWorker.onstatechange = () => {
-                    if (installingWorker.state === 'installed') {
-                        // do nothing
-                    }
-                };
-            };
-        }).catch(() => {
-            // do nothing
-        });
+const registerValidSW = async (swUrl: string): Promise<ServiceWorkerRegistration> => {
 
-const _checkValidServiceWorker = (swUrl: string) =>
-    fetch(swUrl)
-        .then((response) => {
-            // Ensure service worker exists, and that we really are getting a JS file.
-            if (
-                response.status === 404 ||
-                !response.headers.get('content-type').includes('javascript')
-            ) {
-                // No service worker found. Probably a different app. Reload the page.
-                navigator.serviceWorker.ready.then((registration) => {
-                    registration.unregister().then(() => {
-                        window.location.reload();
-                    });
-                });
-            } else {
-                // Service worker found. Proceed as normal.
-                return _registerValidSW(swUrl);
+    const registration = await navigator.serviceWorker.register(swUrl);
+
+    registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed') {
+                // do nothing
             }
-        }).catch(() => {
-            // do nothing
+        };
+    };
+
+    return registration;
+
+};
+
+const checkValidServiceWorker = async (swUrl: string): Promise<ServiceWorkerRegistration> => {
+
+    const response = await fetch(swUrl);
+
+    if (response.status === 404 || !response.headers.get('content-type').includes('javascript')) {
+        await navigator.serviceWorker.ready.then((registration) => {
+            void registration.unregister().then(() => {
+                window.location.reload();
+            });
         });
+    } else {
+        return registerValidSW(swUrl);
+    }
 
-export const register = () => {
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+};
 
-        // The URL constructor is available in all Browsers that support SW.
+export const registerServiceWorker = async (): Promise<ServiceWorkerRegistration> => {
+
+    if ('serviceWorker' in navigator) {
+
         const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+
+        // must be the same origin
         if (publicUrl.origin !== window.location.origin) {
-            // Our service worker won't work if PUBLIC_URL is on a different origin
-            // from What our page is served on. This might happen if a CDN is used to
-            // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
             return;
         }
 
-        window.addEventListener('load', () => {
-            const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-            if (!isLocalhost) {
-                // Is not local host. Just register service worker
-                _registerValidSW(swUrl);
-            } else {
-                // This is running on localhost. Lets check if a service worker still exists or not.
-                _checkValidServiceWorker(swUrl);
-            }
+        return new Promise<ServiceWorkerRegistration>((resolve) => {
+            window.addEventListener('load', () => {
+                if (!_IS_LOCALHOST) {
+                    resolve(registerValidSW(_SW_URL));
+                } else {
+                    resolve(checkValidServiceWorker(_SW_URL));
+                }
+            });
         });
+
+    } else {
+        return null;
+    }
+
+};
+
+export const getPushManagerSubscription = async (): Promise<PushSubscription> => {
+    if ('serviceWorker' in navigator) {
+        return (await navigator.serviceWorker.ready).pushManager.getSubscription();
+    } else {
+        return null;
     }
 };
 
-export const unregister = () => {
+export const getSubscription = async (): Promise<ServiceWorkerRegistration> => {
+
+    const registration = await navigator.serviceWorker.getRegistration(_SW_URL);
+    if (registration) {
+        return registration;
+    } else {
+        return registerServiceWorker();
+    }
+
+};
+
+export const unregister = (): Promise<void | ServiceWorkerRegistration> => {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then((registration) => {
-            registration.unregister();
+        return navigator.serviceWorker.ready.then((registration) => {
+            void registration.unregister();
         });
     }
 };

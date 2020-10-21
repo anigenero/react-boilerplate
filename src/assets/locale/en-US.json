@@ -4,6 +4,9 @@
   },
   "task": {
     "placeholder": "New Task",
-    "submit": "Submit"
+    "submit": "Submit",
+    "validation": {
+      "taskEmpty": "Task name is empty"
+    }
   }
 }

@@ -34,7 +34,7 @@ const mainConfig = (env, argv) => {
 
     return {
         context: sourcePath,
-        devtool: (!isDevelopment ? 'none' : 'source-map'),
+        devtool: (isDevelopment ? 'source-map' : false),
         devServer: {
             historyApiFallback: true,
             hot: true,
@@ -69,7 +69,13 @@ const mainConfig = (env, argv) => {
                             }]
                         ],
                         plugins: [
-                            isDevelopment && 'react-refresh/babel'
+                            isDevelopment && 'react-refresh/babel',
+                            ['@babel/plugin-proposal-decorators', {
+                                legacy: true
+                            }],
+                            ['@babel/plugin-proposal-class-properties', {
+                                loose: true
+                            }]
                         ].filter(Boolean)
                     }
                 }]
@@ -82,7 +88,7 @@ const mainConfig = (env, argv) => {
                 use: [{
                     loader: 'file-loader',
                     options: {
-                        name: './images/[hash].[ext]',
+                        name: './assets/[contenthash].[ext]',
                     }
                 }]
             }, {
@@ -94,17 +100,28 @@ const mainConfig = (env, argv) => {
             }]
         },
         output: {
-            chunkFilename: isDevelopment ? '[name].js' : '[name].[hash].bundle.js',
+            chunkFilename: isDevelopment ? '[name].js' : '[name].[contenthash].bundle.js',
             filename(chunkData) {
                 if (!isDevelopment) {
-                    return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[hash].js';
+                    return chunkData.chunk.name === 'service-worker' ? '[name].js' : '[name].[contenthash].js';
                 } else {
                     return '[name].js';
                 }
             },
             path: outPath,
             pathinfo: false,
-            publicPath: '/'
+            publicPath: '/',
+            globalObject: `(() => {
+                if (typeof self !== 'undefined') {
+                    return self;
+                } else if (typeof window !== 'undefined') {
+                    return window;
+                } else if (typeof global !== 'undefined') {
+                    return global;
+                } else {
+                    return Function('return this')();
+                }
+            })()`
         },
         plugins: [
             new CleanWebpackPlugin(),
@@ -113,15 +130,14 @@ const mainConfig = (env, argv) => {
                 template: 'index.html'
             }),
             new MiniCssExtractPlugin({
-                filename: '[name]-[hash].css',
-                chunkFilename: '[id]-[hash].css'
+                filename: '[name]-[contenthash].css',
+                chunkFilename: '[id]-[contenthash].css'
             }),
             new CopyWebpackPlugin({
                 patterns: [
                     faviconDir,
                     'manifest.json',
-                    'robots.txt',
-                    'sitemap.xml'
+                    'robots.txt'
                 ]
             }),
             new WebpackAssetsManifest({
@@ -140,7 +156,7 @@ const mainConfig = (env, argv) => {
             ...optionalPlugins
         ].filter(Boolean),
         resolve: {
-            extensions: ['.js', '.ts', '.tsx', 'jsx']
+            extensions: ['.mjs', '.js', '.ts', '.tsx', 'jsx']
         },
         target: 'web',
     };

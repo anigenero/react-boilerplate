@@ -2,32 +2,32 @@ import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConnectedRouter } from 'connected-react-router';
 import * as React from 'react';
-import { ApolloProvider } from 'react-apollo';
+import { ValidatorProvider } from 'react-class-validator';
 import { render } from 'react-dom';
 import { LocalizeProvider } from 'react-localize-redux';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import App from './component/App/App';
-import './google.analytics';
-import { apolloClient } from './graphql/apollo.client';
 import { browserHistory, persistor, reduxStore } from './redux/redux.store';
-import { register } from './register.sw';
+import { registerServiceWorker } from './register.sw';
 import { theme } from './theme/theme';
 
-register();
+void registerServiceWorker().catch(() => {
+    // do nothing
+});
 
 render((
     <Provider store={reduxStore}>
         <PersistGate loading={null} persistor={persistor}>
             <ConnectedRouter history={browserHistory}>
-                <ApolloProvider client={apolloClient}>
-                    <LocalizeProvider store={reduxStore}>
+                <LocalizeProvider store={reduxStore}>
+                    <ValidatorProvider>
                         <ThemeProvider theme={theme}>
                             <CssBaseline/>
                             <App/>
                         </ThemeProvider>
-                    </LocalizeProvider>
-                </ApolloProvider>
+                    </ValidatorProvider>
+                </LocalizeProvider>
             </ConnectedRouter>
         </PersistGate>
     </Provider>
