@@ -1,14 +1,14 @@
+import green from '@material-ui/core/colors/green';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
-import { GreenColor } from './colors';
 
 export const theme = createMuiTheme({
     palette: {
         primary: {
-            ...GreenColor
+            ...green
         },
         secondary: {
             main: '#fff',
-            contrastText: GreenColor['400']
+            contrastText: green['400']
         }
     }
 });

@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # load the .env file as exports
-export "$(grep -E -v '^#' .env | xargs)"
+if [[ -f ".env" ]]; then
+  export "$(grep -E -v '^#' .env | xargs)"
+fi
 
 npm run generate:locale
 
