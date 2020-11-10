@@ -1,4 +1,5 @@
-import {createTransform} from 'redux-persist';
+import { createTransform } from 'redux-persist';
+import { AppState } from '../app.state';
 
 export namespace TaskActionTypes {
 
@@ -62,7 +63,7 @@ export type TaskAction =
     TaskActions[typeof TaskActionTypes.CREATE_TASK] |
     TaskReducerAction;
 
-export const taskStateTransform = createTransform(
+export const taskStateTransform = createTransform<TaskState, TaskState, AppState>(
     (inboundState: TaskState, key) => {
         if (key !== 'task') {
             return inboundState;

@@ -18,10 +18,7 @@
     ]
   },
   "exclude": [
-    "node_modules",
-    "/**/*.spec.ts",
-    "/**/*.spec.tsx",
-    "./src/__testutils__/*.ts"
+    "node_modules"
   ],
   "include": [
     "./types/**/*",

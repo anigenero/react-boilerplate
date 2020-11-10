@@ -22,6 +22,7 @@ const requestLink = createHttpLink({
  * @type {ApolloLink}
  */
 const httpLink: ApolloLink = setContext((_, {headers}) => ({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     headers: {
         ...headers,
         // 'authorization': `bearer ${getAuthorizationToken()}`,

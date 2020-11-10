@@ -1,15 +1,16 @@
 import React from 'react';
-import {create} from 'react-test-renderer';
+import { ValidatorProvider } from 'react-class-validator';
+import { Provider } from 'react-redux';
+import { create } from 'react-test-renderer';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { AppState } from '../../../redux/app.state';
 import App from '../App';
-import {Provider} from "react-redux";
-import configureStore from 'redux-mock-store';
-import {AppState} from "../../../redux/app.state";
 
 const mockStore = configureStore<Partial<AppState>>([]);
 
 describe('App', () => {
 
-    let store: any;
+    let store: MockStoreEnhanced<Partial<AppState>>;
 
     beforeEach(() => {
         store = mockStore({
@@ -23,7 +24,9 @@ describe('App', () => {
 
         const tree = create(
             <Provider store={store}>
-                <App/>
+                <ValidatorProvider>
+                    <App/>
+                </ValidatorProvider>
             </Provider>
         ).toJSON();
 

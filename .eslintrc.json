@@ -21,8 +21,7 @@
     "src/graphql/generated.ts",
     "src/graphql/introspection.ts",
     "src/assets/locale/generated.ts",
-    "src/__testutils__/*.ts",
-    "src/**/__tests__/*.ts"
+    "src/__testutils__/*.ts"
   ],
   "plugins": [
     "@typescript-eslint",

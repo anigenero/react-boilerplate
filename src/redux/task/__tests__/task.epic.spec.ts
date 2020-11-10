@@ -1,17 +1,18 @@
-import {TaskDispatchActions} from "../task.action";
-import {TestScheduler} from "rxjs/testing";
-import {epicMockDependencies, frames} from "../../../__testutils__/epic.tester";
-import {AppState} from "../../app.state";
-import {TaskEpics} from "../task.epic";
-import {Task} from "../task.def";
+import { TestScheduler } from 'rxjs/testing';
+import { epicMockDependencies, frames } from '../../../__testutils__/epic.tester';
+import { AppState } from '../../app.state';
+import { TaskDispatchActions } from '../task.action';
+import { Task } from '../task.def';
+import { TaskEpics } from '../task.epic';
 
 describe('task.epic', () => {
 
-    it('should create task', async () => {
+    it('should create task', () => {
 
         const _dateInstance = new Date('2019-05-14T11:01:58.135Z');
 
         jest.spyOn(global, 'Date')
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             .mockImplementationOnce(() => _dateInstance as any);
 
         const task = 'this is a test';
@@ -27,9 +28,9 @@ describe('task.epic', () => {
             });
             const state$: any = null;
 
-            const output$ = TaskEpics.createTask(action$ as any, state$ as any, epicMockDependencies(testScheduler));
+            const output$ = TaskEpics.createTask(action$ as any, state$, epicMockDependencies(testScheduler));
 
-            expectObservable(output$).toBe(`-a`, {
+            expectObservable(output$).toBe('-a', {
                 a: TaskDispatchActions.addTask({id: `${_dateInstance.getTime()}`, text: task}),
             });
 
@@ -37,11 +38,12 @@ describe('task.epic', () => {
 
     });
 
-    it('should create task', async () => {
+    it('should create task', () => {
 
         const _dateInstance = new Date('2019-05-14T11:01:58.135Z');
 
         jest.spyOn(global, 'Date')
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             .mockImplementationOnce(() => _dateInstance as any);
 
         const id = 'test_id';

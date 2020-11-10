@@ -4,10 +4,6 @@ declare let self: ServiceWorkerGlobalScope;
 
 export const CACHE_NAME = 'root';
 
-/**
- * Gets the cache
- * @private
- */
 const _getCache = () => caches.open(CACHE_NAME);
 
 /**
@@ -68,7 +64,7 @@ self.addEventListener('install', (event: ExtendableEvent) => {
         const result = await fetch('/cache.json');
         if (result.ok) {
 
-            const json = await result.json();
+            const json = await result.json() as { [key: string]: string };
             const cachedValues = Object.keys(json).map((key) => {
 
                 const value = json[key];

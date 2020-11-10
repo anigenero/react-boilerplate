@@ -50,6 +50,11 @@ const mainConfig = (env, argv) => {
         mode: argv.mode,
         module: {
             rules: [{
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false
+                }
+            }, {
                 test: /\.ts(|x)?$/,
                 use: [{
                     loader: 'babel-loader',

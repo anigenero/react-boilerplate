@@ -1,6 +1,6 @@
-import {taskReducer} from "../task.reducer";
-import {TaskDispatchActions} from "../task.action";
-import {Task, TaskState} from "../task.def";
+import {TaskDispatchActions} from '../task.action';
+import {Task, TaskState} from '../task.def';
+import {taskReducer} from '../task.reducer';
 
 describe('task.reducer', () => {
 
